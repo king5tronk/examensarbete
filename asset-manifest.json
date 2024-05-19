@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/examensarbete/static/css/main.e309f5d4.css",
+    "main.js": "/examensarbete/static/js/main.5ca3d208.js",
+    "static/js/206.43296860.chunk.js": "/examensarbete/static/js/206.43296860.chunk.js",
+    "static/media/carouselPic2.png": "/examensarbete/static/media/carouselPic2.7309f95a627c6b28c96a.png",
+    "static/media/carouselPic3.png": "/examensarbete/static/media/carouselPic3.c3ad03e98633c24a97c1.png",
+    "static/media/carouselPic4.png": "/examensarbete/static/media/carouselPic4.2971c3094c33ff92faba.png",
+    "static/media/carouselPic1.png": "/examensarbete/static/media/carouselPic1.c6d5d49753b9f5722783.png",
+    "static/media/logo.svg": "/examensarbete/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/examensarbete/index.html"
+  },
+  "entrypoints": [
+    "static/css/main.e309f5d4.css",
+    "static/js/main.5ca3d208.js"
+  ]
+}
