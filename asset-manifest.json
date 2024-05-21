@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/examensarbete/static/css/main.e309f5d4.css",
-    "main.js": "/examensarbete/static/js/main.5ca3d208.js",
+    "main.css": "/examensarbete/static/css/main.793d11cf.css",
+    "main.js": "/examensarbete/static/js/main.9e4d42eb.js",
     "static/js/206.43296860.chunk.js": "/examensarbete/static/js/206.43296860.chunk.js",
     "static/media/carouselPic2.png": "/examensarbete/static/media/carouselPic2.7309f95a627c6b28c96a.png",
     "static/media/carouselPic3.png": "/examensarbete/static/media/carouselPic3.c3ad03e98633c24a97c1.png",
@@ -11,7 +11,7 @@
     "index.html": "/examensarbete/index.html"
   },
   "entrypoints": [
-    "static/css/main.e309f5d4.css",
-    "static/js/main.5ca3d208.js"
+    "static/css/main.793d11cf.css",
+    "static/js/main.9e4d42eb.js"
   ]
 }
