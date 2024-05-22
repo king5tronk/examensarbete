@@ -15,19 +15,19 @@ function App() {
   return (
     <div className="">
 
-<Routes>
-  <Route path='/*' element={<CustomerRoutes/>}></Route>
+      <Routes>
+        <Route path='/*' element={<CustomerRoutes />}></Route>
 
-</Routes>
+      </Routes>
 
-      
+
       <div>
 
 
       </div>
       <div>
 
-        </div>
+      </div>
     </div>
   );
 }

@@ -6,18 +6,15 @@ import {
   ShoppingBagIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Avatar, Button, Menu, MenuItem } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
-import TextField from "@mui/material/TextField";
-import React from "react";
-import { navigation } from "./navigationData";
 import Lottie from 'react-lottie';
 import animationData from "../../../images/Animation - 1715705539245.json";
 import AuthModal from "../../auth/authModal";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser, logout } from "../../../state/auth/Action";
+import { navigation } from "./navigationData";
 
 const defaultOptions = {
   loop: true,
@@ -43,17 +40,19 @@ export default function NavigationFun() {
   const location = useLocation();
   const dispatch = useDispatch();
 
+  const [loggedIn, setLoggedIn] = useState(!!jwt || localStorage.getItem('loggedIn') === 'true');
+
   useEffect(() => {
     if (jwt) {
       dispatch(getUser(jwt));
       /*dispatch(getCart(jwt));*/
     }
-  }, [jwt]);
+  }, [jwt, dispatch]);
 
   const handleUserClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleCloseUserMenu = (event) => {
+  const handleCloseUserMenu = () => {
     setAnchorEl(null);
   };
 
@@ -70,28 +69,29 @@ export default function NavigationFun() {
   };
 
   useEffect(() => {
-    if (auth.user) {
+    if (auth?.user) {
       handleClose();
     }
-    if (location.pathname === "/login" || location.pathname === "/register") {
-      navigate(-1);
-    }
-  }, [auth.user]);
+  }, [auth?.user]);
 
   const handleLogout = () => {
     handleCloseUserMenu();
-    dispatch(logout());
+    //dispatch(logout());
+    localStorage.removeItem("jwt");
+    localStorage.removeItem('loggedIn');
+    setLoggedIn(false);
+    navigate("/");
   };
+
   const handleMyOrderClick = () => {
     handleCloseUserMenu();
-    auth.user?.role === "ROLE_ADMIN"
+    auth?.user?.role === "ROLE_ADMIN"
       ? navigate("/admin")
       : navigate("/account/order");
   };
 
   return (
     <div className="bg-white pb-10">
-      {/* Mobile menu */}
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-40 lg:hidden" onClose={setOpen}>
           <Transition.Child
@@ -128,7 +128,6 @@ export default function NavigationFun() {
                   </button>
                 </div>
 
-                {/* Links */}
                 <Tab.Group as="div" className="mt-2">
                   <div className="border-b border-gray-200">
                     <Tab.List className="-mb-px flex space-x-8 px-4">
@@ -226,17 +225,11 @@ export default function NavigationFun() {
                   ))}
                 </div>
 
-                <div className="space-y-6 border-t border-gray-200 px-4 py-6">
-                  <div className="flow-root">
-                    <a
-                      href="/"
-                      className="-m-2 block p-2 font-medium text-gray-900"
-                    >
-                      Sign in
-                    </a>
+                <div className="ml-auto flex items-center">
+                  <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
+
                   </div>
                 </div>
-
                 <div className="border-t border-gray-200 px-4 py-6">
                   <a href="/" className="-m-2 flex items-center p-2">
                     <img
@@ -251,6 +244,7 @@ export default function NavigationFun() {
                   </a>
                 </div>
               </Dialog.Panel>
+
             </Transition.Child>
           </div>
         </Dialog>
@@ -418,8 +412,8 @@ export default function NavigationFun() {
               </Popover.Group>
 
               <div className="ml-auto flex items-center">
-                <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                  {auth.user ? (
+                <div className="hidden lg:flex lg:flex- lg:items-center lg:justify-end lg:space-x-6">
+                  {loggedIn ? (
                     <div>
                       <Avatar
                         className="text-white"
@@ -434,17 +428,9 @@ export default function NavigationFun() {
                           cursor: "pointer",
                         }}
                       >
-                        {auth.user?.firstName[0].toUpperCase()}
+                        {auth?.user?.firstName[0].toUpperCase()}
                       </Avatar>
-                      <Button
-                        id="basic-button"
-                        aria-controls={open ? "basic-menu" : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? "true" : undefined}
-                        onClick={handleUserClick}
-                      >
-                        Dashboard
-                      </Button>
+
                       <Menu
                         id="basic-menu"
                         anchorEl={anchorEl}
@@ -455,11 +441,9 @@ export default function NavigationFun() {
                         }}
                       >
                         <MenuItem onClick={handleMyOrderClick}>
-                          {auth.user?.role === "ROLE_ADMIN"
-                            ? "Admin Dashboard"
-                            : "My Orders"}
+                          {auth?.user?.role === "ROLE_ADMIN" ? "Admin Dashboard" : "My Orders"}
                         </MenuItem>
-                        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                        <MenuItem onClick={handleLogout}>Sign out</MenuItem>
                       </Menu>
                     </div>
                   ) : (
@@ -486,7 +470,7 @@ export default function NavigationFun() {
                 </div>
 
                 {/* Cart */}
-                {/*<div className="ml-4 flow-root lg:ml-6">
+                <div className="ml-4 flow-root lg:ml-6">
                   <Button
                     onClick={() => navigate("/cart")}
                     className="group -m-2 flex items-center p-2"
@@ -500,13 +484,14 @@ export default function NavigationFun() {
                     </span>
                     <span className="sr-only">items in cart, view bag</span>
                 </Button>
-                </div>*/}
+                </div>
+
               </div>
             </div>
           </div>
         </nav>
       </header>
-      <AuthModal handleClose={handleClose} open={openAuthModal} />
+      <AuthModal open={openAuthModal} handleClose={handleClose} setIsLoggedIn={setLoggedIn} />
     </div>
   );
 }

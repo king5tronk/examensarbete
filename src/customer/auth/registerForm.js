@@ -1,39 +1,52 @@
-import { Button, Grid, TextField } from '@mui/material'
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { Button, Grid, TextField, Snackbar, Alert } from '@mui/material';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getUser, register } from '../../state/auth/Action';
 
-
-const RegisterForm = () => {
+const RegisterForm = ({handleClose}) => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const jwt = localStorage.getItem('jwt')
-    const { auth } = useSelector(store => store);
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [openSnackbar2, setOpenSnackbar2] = useState(false);
 
-    useEffect(() => {
-        if (jwt) {
-            dispatch(getUser(jwt))
-        }
-    }, [jwt, auth.jwt])
-
-    const handleSubmit = (event) => {
-        event.preventDefault()
-
-        const data = new FormData(event.currentTarget);
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
 
         const userData = {
-            FirstName: data.get('firstName'),
-            LastName: data.get('lastName'),
-            Email: data.get('email'),
-            Password: data.get('password')
+            username: formData.get('email'), // Assuming email is used as username
+            password: formData.get('password'),
+        };
+
+        try {
+            const response = await fetch('http://localhost:8080/register', { // Ensure this matches your backend endpoint
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData),
+            });
+
+            if (response.ok) {
+                // Registration successful
+                console.log('User registered successfully.');
+                setOpenSnackbar(true); // Show success alert
+                // Redirect to login page after successful registration
+                handleClose();
+                setTimeout(() => {
+                    navigate("/login");
+                }, 2000); // Adjust the delay as needed
+            } else {
+                setOpenSnackbar2(true);
+                // Handle registration failure
+                console.error('Failed to register user.');
+            }
+        } catch (error) {
+            console.error('Error registering user:', error);
         }
-        dispatch(register(userData))
-        console.log('userData', userData)
+    };
 
-
-
-    }
+    const handleCloseSnackbar = () => {
+        setOpenSnackbar(false);
+    };
 
     return (
         <div>
@@ -42,29 +55,9 @@ const RegisterForm = () => {
                     <Grid item xs={12} sm={6}>
                         <TextField
                             required
-                            id='firstName'
-                            name='firstName'
-                            label='First name'
-                            fullWidth
-                            autoComplete='given-name'
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            required
-                            id='lastName'
-                            name='lastName'
-                            label='Last name'
-                            fullWidth
-                            autoComplete='given-name'
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            required
                             id='email'
                             name='email'
-                            label='Email'
+                            label='Email (Username)'
                             fullWidth
                             autoComplete='email'
                         />
@@ -76,7 +69,8 @@ const RegisterForm = () => {
                             name='password'
                             label='Password'
                             fullWidth
-                            autoComplete='password'
+                            type='password'
+                            autoComplete='current-password'
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -89,23 +83,35 @@ const RegisterForm = () => {
                         >
                             Register
                         </Button>
-
                     </Grid>
-
-
                 </Grid>
             </form>
-
             <div className='flex justify-center flex-col items-center'>
                 <div className='py-3 flex items-center'>
                     <p>if you already have an account ?</p>
                     <Button onClick={() => navigate("/login")} className='ml-5' size='small'>Login</Button>
                 </div>
-
             </div>
-
+            <Snackbar
+                open={openSnackbar}
+                autoHideDuration={2000}
+                onClose={handleCloseSnackbar}
+            >
+                <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
+                    User registered successfully!
+                </Alert>
+            </Snackbar>
+            <Snackbar
+                open={openSnackbar2}
+                autoHideDuration={2000}
+                onClose={handleCloseSnackbar}
+            >
+                <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
+                    Registration Failed!
+                </Alert>
+            </Snackbar>
         </div>
-    )
-}
+    );
+};
 
-export default RegisterForm
+export default RegisterForm;

@@ -9,7 +9,7 @@ import { useLocation } from 'react-router-dom';
 import DeliveryAdressForm from './deliveryAdressForm';
 import OrderSummary from './orderSummary';
 
-const steps = ['Login', 'Add Delivery Address', 'Order Summary', 'Payment'];
+const steps = ['Checkout', 'Add Delivery Address', 'Order Summary', 'Payment Success'];
 
 export default function Checkout() {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -61,7 +61,7 @@ export default function Checkout() {
               onClick={handleBack}
               sx={{ mr: 1 }}
             >
-              Back
+            
             </Button>
 
           </Box>

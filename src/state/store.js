@@ -4,12 +4,16 @@ import { authReducer } from "./auth/Reducer";
 import { customProductReducer } from "./product/Reducer";
 import { cartReducer } from "./cart/Reducer";
 import { orderReducer } from "./order/Reducer";
+import { captureOrderReducer, createOrderReducer } from "./payment/Reducer";
 
 const rootReducers = combineReducers({
     auth: authReducer,
     products: customProductReducer,
     cart: cartReducer,
     order: orderReducer,
+    orderCreate: createOrderReducer,
+    orderCapture: captureOrderReducer,
+    
 
 })
 

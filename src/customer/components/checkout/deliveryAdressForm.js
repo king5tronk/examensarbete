@@ -29,6 +29,10 @@ dispatch(createOrder(orderData))
         console.log('address', address)
     }
 
+    const handleCheckout = () => {
+        navigate('/checkout?step=3')
+    }
+
 
     return (
         <div className=''>
@@ -118,7 +122,7 @@ dispatch(createOrder(orderData))
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
-                                    <Button sx={{ py:1.5, mt: 2, bgcolor: green }}
+                                    <Button onClick={handleCheckout} sx={{ py:1.5, mt: 2, bgcolor: green }}
                                         size="large"
                                         variant="contained"
                                         type="submit"
